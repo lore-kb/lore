@@ -1,0 +1,37 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lore-kb"
+version = "0.1.0"
+description = "Your knowledge base has a compiler. Auto-capture facts and decisions from AI coding sessions."
+readme = "README.md"
+license = "Apache-2.0"
+requires-python = ">=3.10"
+authors = [{ name = "Swathi" }]
+keywords = ["knowledge-base", "memory", "mcp", "claude-code", "llm", "developer-tools"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Documentation",
+]
+dependencies = [
+    "click>=8.0",
+    "anthropic>=0.40.0",
+]
+
+[project.optional-dependencies]
+mcp = ["mcp>=1.0"]
+dev = ["pytest", "pytest-asyncio"]
+
+[project.scripts]
+lore = "lore.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/lorekb/lore"
+Repository = "https://github.com/lorekb/lore"
+
+[tool.setuptools.packages.find]
+where = ["src"]
