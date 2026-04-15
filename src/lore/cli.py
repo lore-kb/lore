@@ -27,9 +27,7 @@ def init():
     click.echo("Next steps:")
     click.echo("  lore learn 'something useful' -p myproject   # capture a learning")
     click.echo("  lore status                                   # see what's captured")
-    click.echo(
-        "  lore compile myproject                        # compile into an article"
-    )
+    click.echo("  lore compile myproject                        # compile into an article")
 
 
 @main.command()
@@ -167,9 +165,7 @@ def status():
 
     click.echo(f"\n  Total: {total_entries} entries across {len(stats)} projects")
     if total_stale:
-        click.echo(
-            f"  ⚠ {total_stale} entries are stale (older than their stale_after date)"
-        )
+        click.echo(f"  ⚠ {total_stale} entries are stale (older than their stale_after date)")
 
 
 @main.command()
@@ -178,9 +174,7 @@ def demo():
     store.ensure_dirs()
 
     samples = [
-        fact(
-            "Claude Code supports --allowedTools for tool-level scoping", project="demo"
-        ),
+        fact("Claude Code supports --allowedTools for tool-level scoping", project="demo"),
         fact("Multica hardcodes --permission-mode bypassPermissions", project="demo"),
         decision(
             "Wrap agent CLIs instead of building custom adapters",
@@ -240,12 +234,8 @@ def install():
     click.echo("\nThen add this to your project's CLAUDE.md:\n")
     click.echo('"""')
     click.echo("You have access to lore (knowledge management). Use it PROACTIVELY:")
-    click.echo(
-        "- When you learn something new about a project → lore_capture(type=fact)"
-    )
-    click.echo(
-        "- When the user makes a decision → lore_capture(type=decision, include WHY)"
-    )
+    click.echo("- When you learn something new about a project → lore_capture(type=fact)")
+    click.echo("- When the user makes a decision → lore_capture(type=decision, include WHY)")
     click.echo("- When the user corrects you → lore_capture(type=feedback)")
     click.echo("- At conversation start about a project → lore_context(project)")
     click.echo("- When you need context from past work → lore_search(query)")

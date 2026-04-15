@@ -48,11 +48,7 @@ class Entry:
 
     def to_json(self) -> str:
         """Serialize to a single JSON line (for JSONL storage)."""
-        d = {
-            k: v
-            for k, v in asdict(self).items()
-            if v is not None and v != [] and v != ""
-        }
+        d = {k: v for k, v in asdict(self).items() if v is not None and v != [] and v != ""}
         # Always include id, type, project, content, ts
         for key in ("id", "type", "project", "content", "ts"):
             if key not in d:
