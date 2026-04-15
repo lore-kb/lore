@@ -1,128 +1,77 @@
+<p align="center">
+  <img src="docs/assets/banner.svg" alt="lore — your knowledge base has a compiler" width="100%">
+</p>
+
+<div align="center">
+
 # lore
 
-**Your knowledge base has a compiler.**
+**Your next 10x isn't a faster model. It's never re-discovering what you already know.**
 
-You work with AI coding tools. You learn things — workarounds, architecture decisions, why approach X failed. By the next session, it's all gone. You re-explain. You re-discover. You lose hours.
+The open-source knowledge compiler for AI coding sessions.<br/>
+Auto-capture facts and decisions as you work. Search across sessions. Compile into a knowledge base.
 
-lore fixes this. It captures knowledge during your AI coding sessions and compiles it into a searchable, version-controlled knowledge base that your AI reads automatically next time.
+[![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python&logoColor=white)](https://python.org)
+[![Status](https://img.shields.io/badge/status-alpha-orange)](https://github.com/lore-kb/lore)
 
-**You work. lore remembers.**
+[Quick Start](#quick-start) · [How It Works](#how-it-works) · [Why Lore](#the-problem) · [Commands](#commands) · [MCP Integration](#connect-to-claude-code) · [Contributing](#contributing)
 
-```bash
-pip install lore-kb
-lore init
-lore demo
-```
+</div>
 
 ---
 
-## The problem
+## What is lore?
+
+lore captures knowledge from your AI coding sessions — facts, decisions, learnings — and compiles them into a searchable, version-controlled knowledge base. Think of it as a **compiler for your project knowledge**: raw inputs go in, structured articles come out.
+
+It works two ways: **automatically** via an MCP server that Claude Code calls during conversation (you do nothing), or **manually** via CLI commands when you want to capture something explicitly. Either way, the knowledge persists across sessions, is searchable, and compiles into clean CLAUDE.md-compatible articles.
+
+<p align="center">
+  <br/>
+  <code>You work. lore remembers.</code>
+  <br/><br/>
+</p>
+
+## The Problem
 
 Every AI coding session generates knowledge. Today, 99% of it is thrown away.
 
-- You spend 2 hours figuring out that iframe widget automation needs shadow DOM inspection
-- You close the terminal
-- Three weeks later, same problem, new session, Claude has no memory of last time
-- You spend another hour re-discovering the same solution
+- You spend 2 hours figuring out a tricky workaround. You close the terminal. Gone.
+- Three weeks later, same problem, new session. Claude has no memory. You re-discover it.
+- You maintain CLAUDE.md files by hand — but who actually updates them?
+- You keep terminal windows open for **a week** because closing them loses context.
 
-This happens every week, across every project, compounding into days of wasted time per month.
+> *"Each session is now 1M token context. You keep prompting and developing for hours, sometimes days. Having this searchable would be the real magic."* — Claude Code power user
 
-**Current workarounds (all manual, all fragile):**
-- Maintaining CLAUDE.md files by hand (who updates them?)
-- Custom `/learn` slash commands (you have to remember to type it)
-- Keeping terminal windows open for a week (seriously — power users do this)
-- Copy-pasting entire conversations into new sessions
-- Sending agents to re-read the whole repo every session
+**Current workarounds are all manual and fragile:** custom `/learn` commands, copy-pasting chats, sending agents to re-read entire repos, Obsidian + MCP, session hooks. Everyone is building the same hacky solution independently.
 
-## How lore works
-
-### 1. Capture (automatic or manual)
-
-**Automatic** — lore runs as an MCP server. Claude Code calls it during conversation without you doing anything:
-
-```
-You: "let's use engine wrappers instead of custom adapters"
-
-Claude: [internally calls lore_capture({
-  type: "decision",
-  content: "Wrap agent CLIs instead of building custom adapters",
-  why: "Multica review showed wrapping is simpler. 200 lines vs 500.",
-  tried_first: "Custom GitHub adapter calling the API directly",
-  failed_because: "Contradicted our own thesis — README says wraps not replaces"
-})]
-
-Claude: "Makes sense. I'll set up the engine wrapper..."
-```
-
-You didn't type anything. lore captured the decision with full reasoning.
-
-**Manual** — for when you want to capture something explicitly:
-
-```bash
-lore learn "iframe automation requires shadow DOM inspection" -p myproject
-lore decision "Use Redis for sessions" -p api --why "PostgreSQL advisory locks had deadlock issues under load"
-lore feedback "Always run tests before committing"
-```
-
-### 2. Search (cross-session, structured)
-
-```bash
-$ lore search "iframe"
-LEARNING   iframe automation requires shadow DOM inspection. Direct
-           querySelector fails silently.
-           myproject | 2026-03-28
-
-$ lore search --type decision --project api
-DECISION   Use Redis for sessions
-           Why: PostgreSQL advisory locks had deadlock issues under load
-           Tried first: pg_advisory_lock with retry loop
-           Outcome: Redis sessions handle 10x the concurrent load
-           api | 2026-04-02
-```
-
-Not keyword grep — **structured search** that knows types, projects, time, and decision traces.
-
-### 3. Compile (LLM synthesis)
-
-```bash
-$ lore compile myproject
-Compiling myproject (47 entries)...
-✓ Written: ~/.lore/compiled/myproject.md (142 lines)
-```
-
-Takes 47 raw entries and produces one clean article:
-
-```markdown
-# myproject
-
-## Key Decisions
-- **Use engine wrappers, not custom adapters**
-  - Why: Multica review showed wrapping is simpler. 200 vs 500 lines.
-  - Outcome: Shipped. Generalizes to all agent CLIs.
-
-## Known Pitfalls
-- iframe widget automation: use shadow DOM inspection, not querySelector
-- Don't use pg_advisory_lock under high concurrency — deadlocks
-
-## Current State
-- 9 CLI commands working, E2E tested
-- v0.1.0 released with 6 platform binaries
-
-## Rules
-- Always run tests before committing
-- Never add Co-Authored-By Claude to commits
-```
-
-Under 200 lines. CLAUDE.md-compatible. Auto-generated. The AI reads this at the start of every session.
+lore replaces all of that with one tool.
 
 ---
 
-## Quick start
+## Features
 
-### Try it (30 seconds)
+- **Auto-Capture via MCP** — Claude Code calls lore during conversation. You never type `lore` anything. Knowledge flows in as a side effect of working.
+- **Decision Traces** — not just *what* you decided, but *why*, *what you tried first*, *why it failed*, and *what happened after*. Six months later, the full context is still there.
+- **LLM Compiler** — takes 50 raw entries and produces one 150-line article. CLAUDE.md-compatible. Under the 200-line budget power users maintain. Auto-generated.
+- **Cross-Session Search** — structured search that knows types (fact vs decision vs learning), projects, time, and outcomes. Not grep — intelligence.
+- **Stale Detection** — facts expire after 30 days by default. `lore status` flags what needs re-verification. No more acting on outdated information.
+- **Local-First** — JSONL files on disk. No database. No cloud. Git-friendly. Your knowledge stays on your machine.
+
+---
+
+## Quick Start
+
+### Install
 
 ```bash
 pip install lore-kb
+```
+
+### Try the demo (30 seconds)
+
+```bash
 lore init
 lore demo
 lore search "adapter"
@@ -130,45 +79,72 @@ lore compile demo
 cat ~/.lore/compiled/demo.md
 ```
 
-### Use it manually
+### Capture your first knowledge
 
 ```bash
-# Capture as you work
-lore learn "hot reload breaks when config changes" -p myapp
-lore decision "Switch to Vite from Webpack" -p frontend \
-  --why "Build times dropped from 45s to 3s" \
-  --tried-first "esbuild" \
-  --failed-because "no HMR support for our plugin setup"
+# A learning you want to remember
+lore learn "iframe automation requires shadow DOM inspection" -p myproject
+
+# A decision with full reasoning
+lore decision "Use Redis for sessions" -p api \
+  --why "PostgreSQL advisory locks deadlocked under load" \
+  --tried-first "pg_advisory_lock with retry loop" \
+  --failed-because "Deadlocks at >50 concurrent connections" \
+  --outcome "Redis handles 10x the load, no deadlocks"
+
+# A fact (auto-expires in 30 days)
 lore fact "API rate limit is 100 req/min per key" -p backend
-lore feedback "Use descriptive variable names, not abbreviations"
 
-# Find past knowledge
-lore search "rate limit"
-lore search --type decision --project frontend
-
-# Compile into an article
-lore compile myapp
-
-# See what's captured
-lore status
+# A rule (applies across all projects)
+lore feedback "Always run tests before committing"
 ```
 
-### Connect to Claude Code (auto-capture)
+### Search past knowledge
 
 ```bash
-lore install
-# Follow the printed instructions to add lore as an MCP server
+lore search "rate limit"
+lore search --type decision --project api
+lore search "iframe"
 ```
 
-After setup, Claude captures knowledge automatically during every conversation. No manual steps.
+### Compile into an article
+
+```bash
+lore compile myproject
+# → ~/.lore/compiled/myproject.md (142 lines, CLAUDE.md-compatible)
+```
 
 ---
 
-## What makes lore different
+## How It Works
 
-### Decision traces, not just notes
+```
+┌─────────────────────────────────────────────────────────────┐
+│                     YOUR WORK SESSION                       │
+│                                                             │
+│  You ↔ Claude Code (normal conversation)                    │
+│         │                                                   │
+│         ├─ detects a fact ──────→ lore_capture (automatic)  │
+│         ├─ makes a decision ───→ lore_capture (automatic)   │
+│         └─ receives feedback ──→ lore_capture (automatic)   │
+│                                                             │
+└──────────────────────────┬──────────────────────────────────┘
+                           │
+                    ┌──────▼──────┐
+                    │  ~/.lore/   │
+                    │  entries/   │  JSONL (append-only, git-friendly)
+                    │  *.jsonl    │
+                    └──────┬──────┘
+                           │
+                     lore compile
+                           │
+                    ┌──────▼──────┐
+                    │  compiled/  │
+                    │  project.md │  CLAUDE.md-compatible article
+                    └─────────────┘
+```
 
-Every tool stores "we use approach X." lore stores the full trace:
+### What gets captured
 
 ```json
 {
@@ -181,22 +157,49 @@ Every tool stores "we use approach X." lore stores the full trace:
 }
 ```
 
-When future-you asks "why don't we use PostgreSQL for sessions?" — the answer is already there with full context. Not "because we decided not to" but **why**, **what we tried first**, and **what happened**.
+Not just **what** — but **why**, **what was tried first**, **why it failed**, and **what happened**. This is a decision trace. When future-you asks "why don't we use PostgreSQL for sessions?" the answer is already there.
 
-### Compiled context, not a knowledge dump
+### What gets compiled
 
-Raw captures pile up. lore compiles them into a concise article that fits within the 200-line budget that power users maintain for their CLAUDE.md files. Stale facts are flagged. Superseded entries are excluded. The result is what the AI actually needs, not everything lore knows.
+```markdown
+# api
 
-### Stale knowledge detection
+## Key Decisions
+- **Use Redis for sessions**
+  - Why: PostgreSQL advisory locks deadlocked under load
+  - Outcome: Redis handles 10x the load, no deadlocks
 
-```bash
-$ lore status
-  myapp    47 entries (3 stale)
-  backend  23 entries (0 stale)
-  ⚠ myapp: 3 facts older than 30 days — verify with 'lore search --stale'
+## Known Pitfalls
+- pg_advisory_lock deadlocks at >50 concurrent connections
+
+## Current State
+- API rate limit is 100 req/min per key
+
+## Rules
+- Always run tests before committing
 ```
 
-Every fact has a staleness date. lore flags facts that are past their expiry so you don't act on outdated information. No other tool does this.
+Under 200 lines. Only the relevant stuff. Stale facts excluded. The AI reads this at the start of every session.
+
+---
+
+## Connect to Claude Code
+
+lore ships as an MCP server. After setup, Claude captures knowledge **automatically** during every conversation.
+
+```bash
+lore install
+```
+
+This prints the config to add to your Claude Code settings. After that, Claude has three tools:
+
+| MCP Tool | What Claude does with it |
+|---|---|
+| `lore_capture` | Stores a fact, decision, learning, or feedback **proactively** during conversation |
+| `lore_search` | Finds relevant knowledge from past sessions when context is needed |
+| `lore_context` | Loads the compiled project summary at the start of a conversation |
+
+You never type anything. Claude calls these tools as a side effect of working with you.
 
 ---
 
@@ -204,64 +207,88 @@ Every fact has a staleness date. lore flags facts that are past their expiry so 
 
 | Command | What it does |
 |---|---|
-| `lore init` | Set up ~/.lore/ directory |
+| `lore init` | Set up `~/.lore/` directory |
+| `lore demo` | Generate sample entries to try it out |
 | `lore learn "..."` | Capture a reusable learning |
 | `lore fact "..."` | Capture a fact (auto-expires in 30 days) |
 | `lore decision "..." --why "..."` | Capture a decision with full reasoning trace |
-| `lore feedback "..."` | Capture a preference (applies globally) |
+| `lore feedback "..."` | Capture a rule or preference (applies globally) |
 | `lore ref "..."` | Capture a reference to external info |
-| `lore search "query"` | Search across all knowledge |
-| `lore compile <project>` | Synthesize entries into a CLAUDE.md article |
+| `lore search "query"` | Search across all captured knowledge |
+| `lore compile <project>` | Synthesize entries into a CLAUDE.md-compatible article |
 | `lore status` | See what's captured, what's stale |
-| `lore serve` | Start the MCP server (Claude Code auto-capture) |
+| `lore serve` | Start the MCP server (for Claude Code auto-capture) |
 | `lore install` | Print Claude Code integration instructions |
-| `lore demo` | Generate sample entries to try it out |
 
-## How it stores knowledge
+---
+
+## Storage
 
 ```
 ~/.lore/
-├── entries/              # Raw captures (JSONL, append-only, git-friendly)
+├── entries/              # Raw captures (JSONL, append-only)
 │   ├── myapp.jsonl       # One file per project
 │   ├── backend.jsonl
 │   └── _global.jsonl     # Feedback and preferences
 └── compiled/             # LLM-synthesized articles
-    ├── myapp.md          # Auto-generated CLAUDE.md
+    ├── myapp.md          # Auto-generated, CLAUDE.md-compatible
     └── backend.md
 ```
 
-- **JSONL** — one JSON object per line. Append-only. Works with `grep`, `jq`, `git diff`.
-- **Git-friendly** — commit your `~/.lore/` directory. Knowledge is version-controlled.
-- **No database** — just files. Move them, back them up, delete them. No lock-in.
+- **JSONL** — one JSON object per line. `grep`, `jq`, `git diff` all work.
+- **Git-friendly** — commit `~/.lore/`. Your knowledge is version-controlled.
+- **No database** — just files. Move them, back them up, sync them. Zero lock-in.
 
-## Comparison
+---
 
-| Tool | Auto-capture | Stores WHY | Compiles | Stale detection | Local-first | CLI |
+## What Makes lore Different
+
+| | Auto-capture | Stores WHY | Compiles articles | Stale detection | Local-first | CLI-first |
 |---|:-:|:-:|:-:|:-:|:-:|:-:|
-| Obsidian | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ |
-| Notion AI | ✗ | ✗ | partial | ✗ | ✗ | ✗ |
-| Fabric | ✗ | ✗ | one-shot | ✗ | ✓ | ✓ |
-| Khoj | ✗ | ✗ | ✗ | ✗ | hybrid | ✗ |
-| Rewind | ✓ (screen) | ✗ | partial | ✗ | partial | ✗ |
-| CLAUDE.md | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ |
+| **Obsidian** | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ |
+| **Notion AI** | ✗ | ✗ | partial | ✗ | ✗ | ✗ |
+| **Fabric** | ✗ | ✗ | one-shot | ✗ | ✓ | ✓ |
+| **Khoj** | ✗ | ✗ | ✗ | ✗ | hybrid | ✗ |
+| **Rewind** | ✓ (screen) | ✗ | partial | ✗ | partial | ✗ |
+| **CLAUDE.md** | ✗ | ✗ | ✗ | ✗ | ✓ | ✗ |
 | **lore** | **✓ (MCP)** | **✓** | **✓** | **✓** | **✓** | **✓** |
+
+**The gap:** every tool either requires manual capture (which people skip) or captures everything without structure (which is noise). Nothing automatically captures **structured knowledge** from AI coding sessions and **compiles** it into something useful.
 
 ---
 
 ## Prerequisites
 
 - **Python 3.10+**
-- **Anthropic API key** (optional — for LLM-powered compilation. Without it, lore compiles using structured templates, no AI needed)
-- **Claude Code** (optional — for MCP auto-capture. Without it, lore works as a manual CLI tool)
+- **Anthropic API key** *(optional)* — for LLM-powered compilation. Without it, lore compiles using structured templates offline.
+- **Claude Code** *(optional)* — for MCP auto-capture. Without it, lore works as a standalone CLI.
+
+---
+
+## Contributing
+
+lore is early and we need help with:
+
+- **MCP integrations** — Cursor, Codex, OpenCode support
+- **Compile patterns** — custom templates for different article styles
+- **Offline compilation** — better structured templates without LLM
+- **Testing** — we need more edge case coverage
+- **Docs** — tutorials, blog posts, translations
+
+See the issues for specific tasks. PRs welcome.
+
+---
 
 ## License
 
-Apache License 2.0 — free for any use, including commercial. No telemetry. No phone-home. Your knowledge stays on your machine.
+Apache License 2.0 — free for any use, including commercial. **No telemetry. No phone-home. Your knowledge stays on your machine.**
 
 ---
 
 <div align="center">
 
-**[Quick start](#quick-start)** · **[Commands](#commands)** · **[How it works](#how-lore-works)** · **[Why it's different](#what-makes-lore-different)**
+**[Get Started](#quick-start)** · **[How It Works](#how-it-works)** · **[Commands](#commands)** · **[MCP Setup](#connect-to-claude-code)**
+
+*Built by developers who got tired of re-explaining things to their AI.*
 
 </div>
