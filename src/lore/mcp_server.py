@@ -20,6 +20,27 @@ import sys
 from .types import fact, decision, learning, feedback, reference
 from . import store, compiler
 
+# Notification symbols for each entry type
+_ICONS = {
+    "fact": "📌",
+    "decision": "⚖️",
+    "learning": "💡",
+    "feedback": "📝",
+    "reference": "🔗",
+}
+
+
+def _notify(entry_type: str, content: str, project: str):
+    """Print a notification to stderr so the user sees it.
+
+    MCP tool results go to Claude (stdout JSON-RPC). The user never sees
+    them. This stderr print is how the user knows lore captured something.
+    """
+    icon = _ICONS.get(entry_type, "📦")
+    proj = f" ({project})" if project and project != "_global" else ""
+    short = content[:80] + "..." if len(content) > 80 else content
+    print(f"  {icon} lore: {entry_type}{proj} — {short}", file=sys.stderr, flush=True)
+
 
 def handle_request(request: dict) -> dict:
     """Handle a JSON-RPC request from Claude Code."""
@@ -217,6 +238,7 @@ def _call_tool(name: str, args: dict) -> str:
         stats = store.project_stats()
         proj = entry.project or "_global"
         count = stats.get(proj, {}).get("total", 1)
+        _notify(entry_type, content, proj)
         return f"Captured {entry_type} ({proj}: {count} entries)"
 
     elif name == "lore_search":

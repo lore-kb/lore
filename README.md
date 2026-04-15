@@ -243,6 +243,41 @@ You never type anything. Claude calls these tools as a side effect of working wi
 
 ---
 
+## Works With Your Existing Knowledge Base
+
+Already have Obsidian, a wiki, CLAUDE.md files, or a custom KB? lore doesn't replace any of that. It sits **underneath** as the capture + compilation engine.
+
+### The three-layer model
+
+```
+Layer 1: lore entries        ← raw facts/decisions (captured automatically)
+                ↓
+Layer 2: compiled summary    ← LLM-synthesized, ~150 lines (AI reads this)
+                ↓
+Layer 3: your full articles  ← human-maintained, has the story + context (you read this)
+```
+
+**Layer 2 doesn't replace Layer 3.** The compiled summary is what the AI reads at session start — concise, current, actionable. Your full articles keep the narrative: why decisions were made, what was tried, the chronological story of how a project evolved.
+
+### Before and after
+
+| | Before lore | With lore |
+|---|---|---|
+| **Capture** | Stop working, open notes, write something | Automatic — lore captures during conversation |
+| **AI context** | You maintain CLAUDE.md by hand | lore compiles a summary the AI reads automatically |
+| **Your articles** | You manually update everything | Lighter updates — just add new narrative. lore handles the summary. |
+| **Search** | Open Obsidian, Cmd+F, browse pages | `lore search "query"` — instant, cross-project, structured |
+| **Staleness** | Nobody knows if old notes are still accurate | `lore status` flags facts older than 30 days |
+
+### What lore does NOT replace
+
+- **Your Obsidian vault** — lore's compiled markdown works as an Obsidian vault. Open `~/.lore/compiled/` alongside your existing vault.
+- **Your full articles** — session notes, decision narratives, historical context stay yours. lore supplements, not supplants.
+- **Your domain knowledge** — concepts, frameworks, reference material that isn't project-specific. lore is for project knowledge, not encyclopedias.
+- **Your raw source docs** — PDFs, screenshots, email threads. lore captures from conversations, not files.
+
+---
+
 ## What Makes lore Different
 
 | | Auto-capture | Stores WHY | Compiles articles | Stale detection | Local-first | CLI-first |
