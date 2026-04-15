@@ -80,10 +80,7 @@ def projects() -> list[str]:
     """List all projects that have entries."""
     ensure_dirs()
     entries_dir = lore_dir() / "entries"
-    return sorted(
-        p.stem for p in entries_dir.glob("*.jsonl")
-        if p.stat().st_size > 0
-    )
+    return sorted(p.stem for p in entries_dir.glob("*.jsonl") if p.stat().st_size > 0)
 
 
 def project_stats() -> dict[str, dict]:
@@ -106,8 +103,9 @@ def project_stats() -> dict[str, dict]:
     return stats
 
 
-def search(query: str, project: Optional[str] = None,
-           entry_type: Optional[str] = None) -> list[Entry]:
+def search(
+    query: str, project: Optional[str] = None, entry_type: Optional[str] = None
+) -> list[Entry]:
     """Search entries by query text, optionally filtered by project and type."""
     if project:
         entries = load_project(project)

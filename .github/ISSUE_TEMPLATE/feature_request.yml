@@ -1,0 +1,35 @@
+name: Feature request
+description: Suggest a new capability or integration
+labels: ["enhancement", "triage"]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What kind of feature?
+      options:
+        - MCP integration (new AI tool support)
+        - Compile pattern (custom article template)
+        - CLI command (new or improved)
+        - Storage / search improvement
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Lead with the pain. "I want X" is less useful than "When I try to Y, Z happens."
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution
+      description: A sketch is fine. CLI examples help.
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered

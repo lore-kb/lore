@@ -27,7 +27,9 @@ def init():
     click.echo("Next steps:")
     click.echo("  lore learn 'something useful' -p myproject   # capture a learning")
     click.echo("  lore status                                   # see what's captured")
-    click.echo("  lore compile myproject                        # compile into an article")
+    click.echo(
+        "  lore compile myproject                        # compile into an article"
+    )
 
 
 @main.command()
@@ -66,9 +68,14 @@ def add_fact(content, project, replaces):
 @click.option("--outcome", default=None, help="What happened after the decision")
 def add_decision(content, project, why, tried_first, failed_because, outcome):
     """Capture a decision with full reasoning trace."""
-    entry = decision(content, project=project, why=why,
-                     tried_first=tried_first, failed_because=failed_because,
-                     outcome=outcome)
+    entry = decision(
+        content,
+        project=project,
+        why=why,
+        tried_first=tried_first,
+        failed_because=failed_because,
+        outcome=outcome,
+    )
     entry = store.append(entry)
     _echo_captured(entry)
 
@@ -95,9 +102,14 @@ def add_reference(content, project):
 @main.command()
 @click.argument("query", default="")
 @click.option("-p", "--project", default=None, help="Filter by project")
-@click.option("-t", "--type", "entry_type", default=None,
-              type=click.Choice(["fact", "decision", "learning", "feedback", "reference"]),
-              help="Filter by entry type")
+@click.option(
+    "-t",
+    "--type",
+    "entry_type",
+    default=None,
+    type=click.Choice(["fact", "decision", "learning", "feedback", "reference"]),
+    help="Filter by entry type",
+)
 @click.option("-n", "--limit", default=20, help="Max results")
 def search(query, project, entry_type, limit):
     """Search across all captured knowledge."""
@@ -146,14 +158,18 @@ def status():
     for project, s in stats.items():
         total_entries += s["total"]
         total_stale += s["stale"]
-        types_str = ", ".join(f'{v} {k}' for k, v in sorted(s["types"].items()))
+        types_str = ", ".join(f"{v} {k}" for k, v in sorted(s["types"].items()))
         stale_str = f" ({s['stale']} stale)" if s["stale"] else ""
         last = s["last_entry"][:10] if s["last_entry"] else "?"
-        click.echo(f"  {project:20s}  {s['total']:4d} entries  ({types_str}){stale_str}  last: {last}")
+        click.echo(
+            f"  {project:20s}  {s['total']:4d} entries  ({types_str}){stale_str}  last: {last}"
+        )
 
     click.echo(f"\n  Total: {total_entries} entries across {len(stats)} projects")
     if total_stale:
-        click.echo(f"  ⚠ {total_stale} entries are stale (older than their stale_after date)")
+        click.echo(
+            f"  ⚠ {total_stale} entries are stale (older than their stale_after date)"
+        )
 
 
 @main.command()
@@ -162,16 +178,27 @@ def demo():
     store.ensure_dirs()
 
     samples = [
-        fact("Claude Code supports --allowedTools for tool-level scoping", project="demo"),
+        fact(
+            "Claude Code supports --allowedTools for tool-level scoping", project="demo"
+        ),
         fact("Multica hardcodes --permission-mode bypassPermissions", project="demo"),
-        decision("Wrap agent CLIs instead of building custom adapters", project="demo",
-                 why="Multica review showed wrapping is simpler. Custom adapters = 500 lines, wrappers = 200 lines.",
-                 tried_first="Custom internal/adapters/github/ Go package calling GitHub API directly",
-                 failed_because="Contradicted our own thesis: README says 'wraps not replaces'",
-                 outcome="Shipped in 200 lines. Generalizes to Codex/OpenClaw/OpenCode."),
-        learning("iframe in widget automation requires inspecting shadow DOM first. Direct querySelector fails silently.", project="demo"),
+        decision(
+            "Wrap agent CLIs instead of building custom adapters",
+            project="demo",
+            why="Multica review showed wrapping is simpler. Custom adapters = 500 lines, wrappers = 200 lines.",
+            tried_first="Custom internal/adapters/github/ Go package calling GitHub API directly",
+            failed_because="Contradicted our own thesis: README says 'wraps not replaces'",
+            outcome="Shipped in 200 lines. Generalizes to Codex/OpenClaw/OpenCode.",
+        ),
+        learning(
+            "iframe in widget automation requires inspecting shadow DOM first. Direct querySelector fails silently.",
+            project="demo",
+        ),
         feedback("Never add Co-Authored-By Claude to commits"),
-        reference("Shopify CLI: shopify store execute --store jumkey.myshopify.com", project="demo"),
+        reference(
+            "Shopify CLI: shopify store execute --store jumkey.myshopify.com",
+            project="demo",
+        ),
     ]
 
     for s in samples:
@@ -199,7 +226,7 @@ def serve():
 def install():
     """Print instructions to add lore to Claude Code."""
     import json as _json
-    server_path = "lore serve"
+
     config = {
         "mcpServers": {
             "lore": {
@@ -213,8 +240,12 @@ def install():
     click.echo("\nThen add this to your project's CLAUDE.md:\n")
     click.echo('"""')
     click.echo("You have access to lore (knowledge management). Use it PROACTIVELY:")
-    click.echo("- When you learn something new about a project → lore_capture(type=fact)")
-    click.echo("- When the user makes a decision → lore_capture(type=decision, include WHY)")
+    click.echo(
+        "- When you learn something new about a project → lore_capture(type=fact)"
+    )
+    click.echo(
+        "- When the user makes a decision → lore_capture(type=decision, include WHY)"
+    )
     click.echo("- When the user corrects you → lore_capture(type=feedback)")
     click.echo("- At conversation start about a project → lore_context(project)")
     click.echo("- When you need context from past work → lore_search(query)")
@@ -233,8 +264,11 @@ def _echo_captured(entry: Entry):
 def _echo_entry(entry: Entry):
     """Print a single entry in search results."""
     type_colors = {
-        "fact": "cyan", "decision": "yellow", "learning": "green",
-        "feedback": "magenta", "reference": "blue",
+        "fact": "cyan",
+        "decision": "yellow",
+        "learning": "green",
+        "feedback": "magenta",
+        "reference": "blue",
     }
     color = type_colors.get(entry.type, "white")
     label = click.style(entry.type.upper().ljust(10), fg=color, bold=True)

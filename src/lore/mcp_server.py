@@ -16,10 +16,8 @@ Or via the CLI:
 
 import json
 import sys
-import os
-from typing import Optional
 
-from .types import Entry, fact, decision, learning, feedback, reference
+from .types import fact, decision, learning, feedback, reference
 from . import store, compiler
 
 
@@ -30,11 +28,14 @@ def handle_request(request: dict) -> dict:
     req_id = request.get("id")
 
     if method == "initialize":
-        return _response(req_id, {
-            "protocolVersion": "2024-11-05",
-            "serverInfo": {"name": "lore", "version": "0.1.0"},
-            "capabilities": {"tools": {"listChanged": False}},
-        })
+        return _response(
+            req_id,
+            {
+                "protocolVersion": "2024-11-05",
+                "serverInfo": {"name": "lore", "version": "0.1.0"},
+                "capabilities": {"tools": {"listChanged": False}},
+            },
+        )
 
     if method == "tools/list":
         return _response(req_id, {"tools": TOOLS})
@@ -44,14 +45,20 @@ def handle_request(request: dict) -> dict:
         args = params.get("arguments", {})
         try:
             result = _call_tool(name, args)
-            return _response(req_id, {
-                "content": [{"type": "text", "text": result}],
-            })
+            return _response(
+                req_id,
+                {
+                    "content": [{"type": "text", "text": result}],
+                },
+            )
         except Exception as e:
-            return _response(req_id, {
-                "content": [{"type": "text", "text": f"Error: {e}"}],
-                "isError": True,
-            })
+            return _response(
+                req_id,
+                {
+                    "content": [{"type": "text", "text": f"Error: {e}"}],
+                    "isError": True,
+                },
+            )
 
     if method == "notifications/initialized":
         return None  # notification, no response needed
@@ -135,7 +142,14 @@ TOOLS = [
                 },
                 "type": {
                     "type": "string",
-                    "enum": ["fact", "decision", "learning", "feedback", "reference", ""],
+                    "enum": [
+                        "fact",
+                        "decision",
+                        "learning",
+                        "feedback",
+                        "reference",
+                        "",
+                    ],
                     "description": "Filter by entry type",
                     "default": "",
                 },
@@ -176,8 +190,11 @@ def _call_tool(name: str, args: dict) -> str:
         supersedes_id = args.get("supersedes", "")
 
         constructors = {
-            "fact": fact, "decision": decision, "learning": learning,
-            "feedback": feedback, "reference": reference,
+            "fact": fact,
+            "decision": decision,
+            "learning": learning,
+            "feedback": feedback,
+            "reference": reference,
         }
         constructor = constructors.get(entry_type)
         if not constructor:

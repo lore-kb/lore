@@ -11,9 +11,11 @@
 The open-source knowledge compiler for AI coding sessions.<br/>
 Auto-capture facts and decisions as you work. Search across sessions. Compile into a knowledge base.
 
+[![CI](https://github.com/lore-kb/lore/actions/workflows/ci.yml/badge.svg)](https://github.com/lore-kb/lore/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python&logoColor=white)](https://python.org)
 [![Status](https://img.shields.io/badge/status-alpha-orange)](https://github.com/lore-kb/lore)
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](CONTRIBUTING.md)
 
 [Quick Start](#quick-start) · [How It Works](#how-it-works) · [Why Lore](#the-problem) · [Commands](#commands) · [MCP Integration](#connect-to-claude-code) · [Contributing](#contributing)
 

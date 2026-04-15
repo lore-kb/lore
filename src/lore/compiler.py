@@ -117,6 +117,7 @@ def _call_anthropic(prompt: str, api_key: str) -> str:
     """Call Claude API for compilation."""
     try:
         import anthropic
+
         client = anthropic.Anthropic(api_key=api_key)
         message = client.messages.create(
             model="claude-sonnet-4-6",
@@ -135,6 +136,7 @@ def _compile_without_llm(project: str, entries_text: str) -> str:
     Not as good as LLM compilation but works offline and with no API key.
     """
     from . import store as s
+
     entries = s.load_project(project)
     superseded = {e.supersedes for e in entries if e.supersedes}
     entries = [e for e in entries if e.id not in superseded and not e.is_stale]
@@ -155,8 +157,8 @@ def _compile_without_llm(project: str, entries_text: str) -> str:
     learnings = [e for e in entries if e.type == "learning"]
     if learnings:
         lines.append("## Learnings")
-        for l in learnings:
-            lines.append(f"- {l.content}")
+        for entry in learnings:
+            lines.append(f"- {entry.content}")
         lines.append("")
 
     facts = [e for e in entries if e.type == "fact"]

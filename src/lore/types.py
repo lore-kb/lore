@@ -48,7 +48,11 @@ class Entry:
 
     def to_json(self) -> str:
         """Serialize to a single JSON line (for JSONL storage)."""
-        d = {k: v for k, v in asdict(self).items() if v is not None and v != [] and v != ""}
+        d = {
+            k: v
+            for k, v in asdict(self).items()
+            if v is not None and v != [] and v != ""
+        }
         # Always include id, type, project, content, ts
         for key in ("id", "type", "project", "content", "ts"):
             if key not in d:
@@ -67,11 +71,20 @@ class Entry:
     def matches(self, query: str) -> bool:
         """Check if this entry matches a search query (case-insensitive)."""
         q = query.lower()
-        searchable = " ".join(filter(None, [
-            self.content, self.why, self.tried_first,
-            self.failed_because, self.outcome,
-            self.project, " ".join(self.tags),
-        ])).lower()
+        searchable = " ".join(
+            filter(
+                None,
+                [
+                    self.content,
+                    self.why,
+                    self.tried_first,
+                    self.failed_because,
+                    self.outcome,
+                    self.project,
+                    " ".join(self.tags),
+                ],
+            )
+        ).lower()
         # All query words must appear somewhere
         return all(word in searchable for word in q.split())
 
@@ -98,7 +111,7 @@ class Entry:
         """One-line summary for search results."""
         text = self.content[:max_len]
         if len(self.content) > max_len:
-            text = text[:max_len - 3] + "..."
+            text = text[: max_len - 3] + "..."
         return text
 
 
