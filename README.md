@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/banner.svg" alt="lore — your knowledge base has a compiler" width="100%">
+  <img src="https://raw.githubusercontent.com/lore-kb/lore/main/docs/assets/banner.svg" alt="lore — your knowledge base has a compiler" width="100%">
 </p>
 
 <div align="center">
@@ -11,13 +11,13 @@
 The open-source knowledge compiler for AI coding sessions.<br/>
 Auto-capture facts and decisions as you work. Search across sessions. Compile into a knowledge base.
 
+[![PyPI](https://img.shields.io/pypi/v/lore-kb?color=blue)](https://pypi.org/project/lore-kb/)
+[![Downloads](https://img.shields.io/pypi/dm/lore-kb?color=blue)](https://pypi.org/project/lore-kb/)
+[![Python](https://img.shields.io/pypi/pyversions/lore-kb?logo=python&logoColor=white)](https://pypi.org/project/lore-kb/)
 [![CI](https://github.com/lore-kb/lore/actions/workflows/ci.yml/badge.svg)](https://github.com/lore-kb/lore/actions/workflows/ci.yml)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![Python](https://img.shields.io/badge/Python-3.10+-blue?logo=python&logoColor=white)](https://python.org)
-[![Status](https://img.shields.io/badge/status-alpha-orange)](https://github.com/lore-kb/lore)
+[![Status](https://img.shields.io/badge/status-alpha-orange)](https://github.com/lore-kb/lore/releases)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen)](CONTRIBUTING.md)
-
-[Quick Start](#quick-start) · [How It Works](#how-it-works) · [Why Lore](#the-problem) · [Commands](#commands) · [MCP Integration](#connect-to-claude-code) · [Contributing](#contributing)
 
 </div>
 
@@ -70,6 +70,8 @@ lore replaces all of that with one tool.
 ```bash
 pip install lore-kb
 ```
+
+> **Status:** v0.1.0 alpha — first public release (2026-04-23). Ships working, feedback welcome via [issues](https://github.com/lore-kb/lore/issues).
 
 ### Try the demo (30 seconds)
 
