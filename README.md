@@ -10,10 +10,9 @@
 
 The open-source knowledge compiler for AI coding sessions.
 
-[![PyPI](https://img.shields.io/pypi/v/lore-kb?color=blue)](https://pypi.org/project/lore-kb/)
-[![Downloads](https://img.shields.io/pypi/dm/lore-kb?color=blue)](https://pypi.org/project/lore-kb/)
-[![Python](https://img.shields.io/pypi/pyversions/lore-kb?logo=python&logoColor=white)](https://pypi.org/project/lore-kb/)
-[![CI](https://github.com/lore-kb/lore/actions/workflows/ci.yml/badge.svg)](https://github.com/lore-kb/lore/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/lore-kb)](https://pypi.org/project/lore-kb/)
+[![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12%20%7C%203.13-blue?logo=python&logoColor=white)](https://pypi.org/project/lore-kb/)
+[![CI](https://github.com/lore-kb/lore/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/lore-kb/lore/actions/workflows/ci.yml?query=branch%3Amain)
 [![License](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Status](https://img.shields.io/badge/status-alpha-orange)](https://github.com/lore-kb/lore/releases)
 
