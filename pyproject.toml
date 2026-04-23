@@ -30,8 +30,10 @@ dev = ["pytest", "pytest-asyncio"]
 lore = "lore.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/lorekb/lore"
-Repository = "https://github.com/lorekb/lore"
+Homepage = "https://github.com/lore-kb/lore"
+Repository = "https://github.com/lore-kb/lore"
+Issues = "https://github.com/lore-kb/lore/issues"
+Changelog = "https://github.com/lore-kb/lore/releases"
 
 [tool.setuptools.packages.find]
 where = ["src"]
